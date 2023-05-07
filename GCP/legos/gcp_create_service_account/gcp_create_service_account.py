@@ -2,9 +2,9 @@
 ##  Copyright (c) 2021 unSkript, Inc
 ##  All rights reserved.
 ##
-from pydantic import BaseModel, Field
 import pprint
-from typing import List,Any, Dict
+from typing import Dict
+from pydantic import BaseModel, Field
 import googleapiclient.discovery
 
 
@@ -25,9 +25,14 @@ class InputSchema(BaseModel):
 def gcp_create_service_account_printer(output):
     if output is None:
         return
-    pprint(output)
+    pprint.pprint(output)
 
-def gcp_create_service_account(handle, project_id: str, accountId: str, display_name:str) -> Dict:
+def gcp_create_service_account(
+        handle,
+        project_id: str,
+        accountId: str,
+        display_name:str
+        ) -> Dict:
     """gcp_create_service_account Returns a Dict of details of the created service account
 
         :type project_id: string
@@ -41,7 +46,7 @@ def gcp_create_service_account(handle, project_id: str, accountId: str, display_
 
         :rtype: Dict of details of the created service account
     """
-    """Creates a service account."""
+    #Creates a service account.#
     service = googleapiclient.discovery.build(
         'iam', 'v1', credentials=handle)
 

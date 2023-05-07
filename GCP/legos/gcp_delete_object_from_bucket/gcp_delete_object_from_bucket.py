@@ -2,9 +2,8 @@
 ##  Copyright (c) 2021 unSkript, Inc
 ##  All rights reserved.
 ##
+from typing import Dict
 from pydantic import BaseModel, Field
-import pprint
-from typing import List,Any, Dict
 from google.cloud import storage
 
 class InputSchema(BaseModel):
@@ -20,8 +19,8 @@ class InputSchema(BaseModel):
 def gcp_delete_object_from_bucket_printer(output):
     if output is None:
         return
-    print("Successfully deleted {}".format(output["blob_name"]))
-    
+    print(f"Successfully deleted {output['blob_name']}")
+
 
 def gcp_delete_object_from_bucket(handle,blob_name: str, bucket_name: str) -> Dict:
     """gcp_delete_object_from_bucket deletes an object in a GCP Bucket

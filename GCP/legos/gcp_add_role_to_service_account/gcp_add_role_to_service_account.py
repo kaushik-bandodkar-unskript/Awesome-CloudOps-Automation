@@ -2,9 +2,9 @@
 ##  Copyright (c) 2021 unSkript, Inc
 ##  All rights reserved.
 ##
-from pydantic import BaseModel, Field
 import pprint
-from typing import List,Any, Dict
+from typing import Dict
+from pydantic import BaseModel, Field
 from googleapiclient import discovery
 
 
@@ -29,9 +29,15 @@ class InputSchema(BaseModel):
 def gcp_add_role_to_service_account_printer(output):
     if output is None:
         return
-    pprint(output)
+    pprint.pprint(output)
 
-def gcp_add_role_to_service_account(handle, project_id: str, role: str, member_email:str, sa_id:str) -> Dict:
+def gcp_add_role_to_service_account(
+        handle,
+        project_id: str,
+        role: str,
+        member_email:str,
+        sa_id:str
+        ) -> Dict:
     """gcp_add_role_to_service_account Returns a Dict of new policy details
 
         :type project_id: string
@@ -51,7 +57,7 @@ def gcp_add_role_to_service_account(handle, project_id: str, role: str, member_e
     service = discovery.build('iam', 'v1', credentials=handle)
     result = {}
     try:
-        resource = 'projects/{}/serviceAccounts/{}'.format(project_id, sa_id)
+        resource = f'projects/{project_id}/serviceAccounts/{sa_id}'
         request = service.projects().serviceAccounts().getIamPolicy(resource=resource)
         response = request.execute()
 
@@ -69,8 +75,11 @@ def gcp_add_role_to_service_account(handle, project_id: str, role: str, member_e
                   "role": get_role,
                   "members": [member]}
             response["bindings"].append(add_role)
-            
-        set_policy = service.projects().serviceAccounts().setIamPolicy(resource=resource, body={"policy": response})
+
+        set_policy = service.projects().serviceAccounts().setIamPolicy(
+            resource=resource,
+            body={"policy": response}
+            )
         policy_output = set_policy.execute()
         result = policy_output
 

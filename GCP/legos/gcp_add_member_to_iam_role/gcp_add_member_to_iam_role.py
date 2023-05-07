@@ -2,9 +2,9 @@
 ##  Copyright (c) 2021 unSkript, Inc
 ##  All rights reserved.
 ##
-from pydantic import BaseModel, Field
 import pprint
-from typing import List,Any, Dict
+from typing import Dict
+from pydantic import BaseModel, Field
 import googleapiclient.discovery
 
 
@@ -29,9 +29,15 @@ class InputSchema(BaseModel):
 def gcp_add_member_to_iam_role_printer(output):
     if output is None:
         return
-    pprint(output)
+    pprint.pprint(output)
 
-def gcp_add_member_to_iam_role(handle, project_id: str, role: str, member_email:str, version:int = 1) -> Dict:
+def gcp_add_member_to_iam_role(
+        handle,
+        project_id: str,
+        role: str,
+        member_email:str,
+        version:int = 1
+        ) -> Dict:
     """gcp_add_member_to_iam_role Returns a Dict of policy details
 
         :type project_id: string
@@ -77,7 +83,7 @@ def gcp_add_member_to_iam_role(handle, project_id: str, role: str, member_email:
         add_member = (
             service.projects()
             .setIamPolicy(resource=project_id, body={"policy": get_policy}).execute())
-            
+
         result = add_member
 
     except Exception as error:

@@ -2,10 +2,8 @@
 ##  Copyright (c) 2021 unSkript, Inc
 ##  All rights reserved.
 ##
+from typing import Dict
 from pydantic import BaseModel, Field
-from beartype import beartype
-import pprint
-from typing import List,Any, Dict
 from google.cloud import storage
 
 
@@ -33,9 +31,15 @@ class InputSchema(BaseModel):
 def gcp_create_bucket_printer(output):
     if output is None:
         return
-    print("Created bucket {} in {} with storage class {}".format(output["name"], output["location"], output["storage_class"]))
+    print(f"Created bucket {output['name']} in {output['location']} with storage class {output['storage_class']}")
 
-def gcp_create_bucket(handle, bucket_name: str, location: str, project_name: str,storage_class: str) -> Dict:
+def gcp_create_bucket(
+        handle,
+        bucket_name: str,
+        location: str,
+        project_name: str,
+        storage_class: str
+        ) -> Dict:
     """gcp_create_bucket Returns a Dict of details of the newly created bucket
 
         :type bucket_name: string
@@ -57,7 +61,11 @@ def gcp_create_bucket(handle, bucket_name: str, location: str, project_name: str
         storage_client = storage.Client(credentials=handle)
         bucket = storage_client.bucket(bucket_name)
         bucket.storage_class = storage_class
-        new_bucket = storage_client.create_bucket(bucket,location=location, project=project_name)
+        new_bucket = storage_client.create_bucket(
+            bucket,
+            location=location,
+            project=project_name
+            )
         result["name"]= new_bucket.name
         result["location"]= new_bucket.location
         result["storage_class"]= new_bucket.storage_class

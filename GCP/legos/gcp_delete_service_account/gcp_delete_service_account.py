@@ -2,9 +2,9 @@
 ##  Copyright (c) 2021 unSkript, Inc
 ##  All rights reserved.
 ##
-from pydantic import BaseModel, Field
 import pprint
 from typing import Dict
+from pydantic import BaseModel, Field
 from googleapiclient import discovery
 
 
@@ -18,7 +18,7 @@ class InputSchema(BaseModel):
 def gcp_delete_service_account_printer(output):
     if output is None:
         return
-    pprint(output)
+    pprint.pprint(output)
 
 
 def gcp_delete_service_account(handle, sa_id: str) -> Dict:
@@ -37,7 +37,7 @@ def gcp_delete_service_account(handle, sa_id: str) -> Dict:
         service.projects().serviceAccounts().delete(
             name='projects/-/serviceAccounts/' + sa_id).execute()
 
-        result["Success"] = "Account with name {} deleted successfuly".format(email)
+        result["Success"] = f"Account with name {email} deleted successfuly"
 
     except Exception as error:
         result = {"error": error}
