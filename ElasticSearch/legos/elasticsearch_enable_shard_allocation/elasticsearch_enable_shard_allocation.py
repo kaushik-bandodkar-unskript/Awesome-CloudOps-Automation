@@ -2,12 +2,8 @@
 # Copyright (c) 2021 unSkript, Inc
 # All rights reserved.
 ##
-import subprocess
-import pprint
-from pydantic import BaseModel, Field
-from typing import List, Dict
-from subprocess import PIPE, run
-import json
+from typing import Dict
+from pydantic import BaseModel
 
 
 class InputSchema(BaseModel):
@@ -22,7 +18,8 @@ def elasticsearch_enable_shard_allocation_printer(output):
 
 
 def elasticsearch_enable_shard_allocation(handle) -> Dict:
-    """elasticsearch_enable_shard_allocation enables shard allocations for any shards for any indices.
+    """elasticsearch_enable_shard_allocation enables shard allocations
+    for any shards for any indices.
 
             :type handle: object
             :param handle: Object returned from Task Validate

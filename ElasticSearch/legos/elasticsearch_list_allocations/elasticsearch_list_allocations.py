@@ -2,9 +2,7 @@
 # Copyright (c) 2021 unSkript, Inc
 # All rights reserved.
 ##
-import subprocess
-from subprocess import PIPE
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class InputSchema(BaseModel):
@@ -18,7 +16,7 @@ def elasticsearch_list_allocations_printer(output):
 
 
 def elasticsearch_list_allocations(handle) -> str:
-    """elasticsearch_list_allocations lists the allocations of an Elasticsearch cluster .
+    """elasticsearch_list_allocations lists the allocations of an Elasticsearch cluster.
 
             :type handle: object
             :param handle: Object returned from Task Validate

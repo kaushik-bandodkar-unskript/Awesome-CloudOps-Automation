@@ -2,9 +2,7 @@
 # Copyright (c) 2021 unSkript, Inc
 # All rights reserved.
 ##
-import subprocess
-from subprocess import PIPE
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class InputSchema(BaseModel):

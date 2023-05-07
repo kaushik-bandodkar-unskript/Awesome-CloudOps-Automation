@@ -2,12 +2,8 @@
 # Copyright (c) 2021 unSkript, Inc
 # All rights reserved.
 ##
-import subprocess
-import pprint
-from pydantic import BaseModel, Field
-from typing import List, Dict
-from subprocess import PIPE, run
-import json
+from typing import Dict
+from pydantic import BaseModel
 
 
 class InputSchema(BaseModel):

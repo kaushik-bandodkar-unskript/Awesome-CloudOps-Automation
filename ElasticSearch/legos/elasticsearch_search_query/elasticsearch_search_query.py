@@ -3,8 +3,8 @@
 ##  All rights reserved.
 ##
 import json
+from typing import List
 from pydantic import BaseModel, Field
-from typing import List, Dict
 
 
 class InputSchema(BaseModel):
@@ -15,7 +15,8 @@ class InputSchema(BaseModel):
     index: str = Field(
         '',
         title='Index',
-        description='A comma-separated list of index names to search; use _all or empty string to perform the operation on all indices.'
+        description=('A comma-separated list of index names to search; use _all or empty '
+                     'string to perform the operation on all indices.')
     )
     size: int = Field(
         '100',
@@ -37,7 +38,7 @@ def elasticsearch_search_query_printer(output):
         for num,doc in enumerate(output):
             print(f'DOC ID: {doc["_id"]}')
             print(json.dumps(doc["_source"]))
-    
+
 
 def elasticsearch_search_query(handle, 
                                query: str, 
@@ -70,8 +71,15 @@ def elasticsearch_search_query(handle,
     # Input param validation.
 
     result = {}
-    data = handle.search(query={"query_string": {"query": query}}, index=index, size=size, sort=sort, _source=fields)
-    print("Got %d Hits: " % data['hits']['total']['value'])
+    data = handle.search(
+         query={"query_string": {"query": query}},
+         index=index,
+         size=size,
+         sort=sort, 
+         source=fields
+         )
+    temp = data['hits']['total']['value']
+    print(f"Got {temp} Hits: ")
     result = data['hits']['hits']
 
     return result

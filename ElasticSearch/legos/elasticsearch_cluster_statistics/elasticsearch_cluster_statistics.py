@@ -2,12 +2,8 @@
 # Copyright (c) 2021 unSkript, Inc
 # All rights reserved.
 ##
-import subprocess
-import pprint
-from pydantic import BaseModel, Field
-from typing import List, Dict
-from subprocess import PIPE, run
-import json
+from typing import Dict
+from pydantic import BaseModel
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -19,7 +15,7 @@ class InputSchema(BaseModel):
 def plotData(output, keywords, docs, shards):
     plot1 = plt.subplot2grid((3, 3), (0, 0), colspan=2, rowspan=2)
     plot2 = plt.subplot2grid((3, 3), (0, 2), colspan=2, rowspan=2)
-    for idx, keyword in enumerate(keywords):
+    for keyword in keywords:
         data = output.get(keyword)
         names = list(data.keys())
         values = list(data.values())
@@ -44,7 +40,7 @@ def elasticsearch_cluster_statistics_printer(output):
     print("Cluster Name: ", output.get('cluster_name'))
     print("Timestamp: ", output.get('timestamp'))
     print("Status: ", output.get('status'))
-    for k, v in output.items():
+    for k in output.keys():
         if k == 'indices':
             shards = output['indices']['shards']['index']
             docs = output['indices']['docs']
@@ -53,13 +49,14 @@ def elasticsearch_cluster_statistics_printer(output):
 
 
 def elasticsearch_cluster_statistics(handle) -> Dict:
-    """elasticsearch_cluster_statistics fetches basic index metrics and information about the current nodes that form the cluster.
+    """elasticsearch_cluster_statistics fetches basic index metrics and information
+    about the current nodes that form the cluster.
             :type handle: object
             :param handle: Object returned from Task Validate
 
             :rtype: Result Dict of result
     """
-  
+
     output = handle.web_request("/_cluster/stats?human&pretty&pretty",  # Path
                                 "GET",                      # Method
                                 None)                       # Data

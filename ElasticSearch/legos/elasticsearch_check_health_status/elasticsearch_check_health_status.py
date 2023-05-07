@@ -2,12 +2,8 @@
 # Copyright (c) 2021 unSkript, Inc
 # All rights reserved.
 ##
-import subprocess
-import pprint
-from pydantic import BaseModel, Field
-from typing import Dict, Tuple
-from subprocess import PIPE
-import json
+from typing import Tuple
+from pydantic import BaseModel
 
 
 class InputSchema(BaseModel):
@@ -32,11 +28,11 @@ def elasticsearch_check_health_status(handle) -> Tuple:
     output = handle.web_request("/_cluster/health?pretty",  # Path
                                 "GET",                      # Method
                                 None)                       # Data
-    
+
     if output['status'] != 'green':
         cluster_health[output['cluster_name']] = output['status'] 
         result.append(cluster_health)
     if len(result) != 0:
         return(False, result)
-    else:
-        return(True, None)
+    return(True, None)
+    
