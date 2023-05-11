@@ -5,9 +5,8 @@
 ##
 
 import pprint
-from typing import Optional, List, Dict
 from pydantic import BaseModel, Field
-from github import GithubException
+from github import GithubException, BadCredentialsException, UnknownObjectException
 
 
 
@@ -67,13 +66,12 @@ def github_assign_issue(handle, owner:str, repository:str, issue_number:int, ass
         result = issue.add_to_assignees(assignee)
     except GithubException as e:
         if e.status == 403:
-            raise Exception("You need admin access")
+            raise BadCredentialsException("You need admin access") from e
         if e.status == 404:
-            raise Exception("No such repository or user found")
+            raise UnknownObjectException("No such repository or user found") from e
         raise e.data
     except Exception as e:
         raise e
     if result is None:
         return f"Issue {issue_no} assigned to {assignee}"
-    else:
-        return f"Unable to assign Issue {issue_no} to {assignee}"
+    return f"Unable to assign Issue {issue_no} to {assignee}"

@@ -5,9 +5,9 @@
 ##
 
 import pprint
-from typing import Optional, List, Dict
+from typing import Dict
 from pydantic import BaseModel, Field
-from github import GithubException
+from github import GithubException, BadCredentialsException, UnknownObjectException
 
 
 
@@ -59,7 +59,7 @@ def github_get_issue(handle, owner:str, repository:str, issue_number:int) -> Dic
         issue = repo.get_issue(issue_no)
         issue_details["title"] = issue.title
         issue_details["issue_number"] = issue.number
-        if type(issue.assignee) == 'NoneType':
+        if isinstance(issue.assignee, type(None)):
             issue_details["assignee"] = issue.assignee.login
         else:
             issue_details["assignee"] = issue.assignee
@@ -70,9 +70,9 @@ def github_get_issue(handle, owner:str, repository:str, issue_number:int) -> Dic
         issue_details["updated_at"] = formatted_date
     except GithubException as e:
         if e.status == 403:
-            raise Exception("You need admin access")
+            raise BadCredentialsException("You need admin access") from e
         if e.status == 404:
-            raise Exception("No such repository or user found")
+            raise UnknownObjectException("No such repository or user found") from e
         raise e.data
     except Exception as e:
         raise e

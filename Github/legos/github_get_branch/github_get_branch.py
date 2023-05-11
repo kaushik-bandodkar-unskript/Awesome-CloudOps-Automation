@@ -2,15 +2,15 @@
 ##  Copyright (c) 2023 unSkript, Inc
 ##  All rights reserved.
 ##
-from github import GithubException
-from typing import Optional, List, Dict
-from pydantic import BaseModel, Field
 import pprint
+from typing import Dict
+from pydantic import BaseModel, Field
+from github import GithubException, BadCredentialsException, UnknownObjectException
 
 
 class InputSchema(BaseModel):
     branch_name: str = Field(
-        description='Branch name. Eg:"dummy-branch-name"', 
+        description='Branch name. Eg:"dummy-branch-name"',
         title='Branch Name'
     )
     owner: str = Field(
@@ -60,11 +60,10 @@ def github_get_branch(handle, owner:str, repository: str, branch_name: str) -> D
                 return [f"{branch_name} not found"]
     except GithubException as e:
         if e.status == 403:
-            raise Exception("You need admin access")
+            raise BadCredentialsException("You need admin access") from e
         if e.status == 404:
-            raise Exception("No such repository or user found")
+            raise UnknownObjectException("No such repository or user found") from e
         raise e.data
     except Exception as e:
         raise e
-    return result
-
+    return branch_info
